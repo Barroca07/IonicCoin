@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>💱 IonicCoin</ion-title>
+    <ion-badge slot="end" [color]="isOnline ? 'success' : 'danger'" style="margin-right:12px">
+      {{ isOnline ? 'Online' : 'Offline' }}
+    </ion-badge>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Conversão de Moedas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <!-- Moeda de Origem -->
+      <ion-item>
+        <ion-label position="stacked">De</ion-label>
+        <ion-searchbar [(ngModel)]="searchFrom" placeholder="Buscar moeda..." (ionInput)="null"></ion-searchbar>
+        <ion-select [(ngModel)]="fromCurrency" (ionChange)="onFromChange()" interface="popover">
+          <ion-select-option *ngFor="let c of filteredFrom()" [value]="c">{{ c }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Botão Inverter -->
+      <div style="text-align:center; margin: 8px 0;">
+        <ion-button fill="clear" (click)="swapCurrencies()">
+          <ion-icon name="swap-vertical-outline" slot="icon-only" size="large"></ion-icon>
+        </ion-button>
+      </div>
+
+      <!-- Moeda de Destino -->
+      <ion-item>
+        <ion-label position="stacked">Para</ion-label>
+        <ion-searchbar [(ngModel)]="searchTo" placeholder="Buscar moeda..."></ion-searchbar>
+        <ion-select [(ngModel)]="toCurrency" interface="popover">
+          <ion-select-option *ngFor="let c of filteredTo()" [value]="c">{{ c }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Valor -->
+      <ion-item>
+        <ion-label position="stacked">Valor</ion-label>
+        <ion-input type="number" [(ngModel)]="amount" placeholder="0.00"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="convert()" style="margin-top:16px" color="primary">
+        <ion-icon name="calculator-outline" slot="start"></ion-icon>
+        Converter
+      </ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Resultado -->
+  <ion-card *ngIf="result !== null" color="success">
+    <ion-card-content style="text-align:center">
+      <h1 style="font-size:2rem; font-weight:bold; color:white">
+        {{ result | number:'1.2-2' }} {{ toCurrency }}
+      </h1>
+      <p style="color:white">
+        1 {{ fromCurrency }} = {{ rate | number:'1.4-4' }} {{ toCurrency }}
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
